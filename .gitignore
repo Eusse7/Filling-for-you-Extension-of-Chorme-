@@ -1,2 +1,5 @@
 api/venv/
 web/node_modules/
+api/data/*.db
+**/__pycache__/
+*.pyc

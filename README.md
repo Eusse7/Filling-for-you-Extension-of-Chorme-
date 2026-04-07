@@ -20,6 +20,8 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 3000
 ```
 
+El backend usa una única base de datos PostgreSQL para local y producción.
+
 ## 2) Levantar web (React)
 ```bash
 cd web
@@ -33,14 +35,23 @@ Abre: http://localhost:5173
 - Edge: `edge://extensions` -> Developer mode -> Load unpacked -> carpeta `extension`
 
 ## 4) Probar
-- En http://localhost:5173 ve a **Administración** y guarda Perfil + Conocimiento
-- En http://localhost:5173 ve a **Formularios**
-- Abre el popup de la extensión
-- Deja **Modo seguro** activado para ver la previsualización
-- Click **Previsualizar/Llenar**
-- Revisa **Ver bitácora**
+- En http://localhost:5173 actualiza **Perfil** y **Conocimiento**
+- Para pruebas de autollenado abre: http://localhost:5173/form-test.html
+- En la extensión usa **Ir a mi perfil** y **Previsualizar/Llenar**
 
 Persistencia backend:
-- La información se guarda en `api/data/store.json`.
+- La información se guarda en PostgreSQL en tablas: `users`, `user_profiles`, `user_knowledge`, `app_logs`.
+
+## 5) Ejecutar con Docker
+```bash
+docker compose up --build
+```
+
+Servicios:
+- PostgreSQL: localhost:5432
+- API: http://localhost:3000
+- Web: http://localhost:5173
+
+La base queda persistida en el volumen `api_data` del `docker-compose.yml`.
 
 Token demo: `demo-token`

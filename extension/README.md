@@ -15,8 +15,8 @@
 4. Selecciona la carpeta: `demo-autofill-solid/extension`
 
 ## Uso
-- Abre el sitio: `http://localhost:5173`
-- Ve a la sección de administración y guarda tus datos en **Perfil** y **Conocimiento**.
-- Abre el popup de la extensión
-- (Opcional) Guarda el token `demo-token`
-- Click **Previsualizar/Llenar**
+- Abre `http://localhost:5173` y actualiza **Perfil** y **Conocimiento**.
+- Para pruebas de autollenado abre `http://localhost:5173/form-test.html`.
+- En el popup usa:
+	- **Ir a mi perfil**
+	- **Previsualizar/Llenar**

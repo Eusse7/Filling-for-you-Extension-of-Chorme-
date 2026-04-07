@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
 import { api } from "../../api/client.js";
 
+const EMPTY_PROFILE = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  addressLine1: "",
+  city: "",
+  country: "",
+  linkedin: "",
+  github: ""
+};
+
 export function useProfile() {
   const [profile, setProfile] = useState(null);
   const [status, setStatus] = useState("");
@@ -10,10 +22,11 @@ export function useProfile() {
       try {
         setStatus("Cargando perfil...");
         const p = await api.get("/profile");
-        setProfile(p);
+        setProfile(p ?? EMPTY_PROFILE);
         setStatus("Listo.");
       } catch (e) {
-        setStatus(String(e));
+        setProfile(EMPTY_PROFILE);
+        setStatus(`No se pudo cargar desde API. Puedes completar y guardar manualmente. (${String(e)})`);
       }
     })();
   }, []);

@@ -1,0 +1,1 @@
+"""Metadatos y constantes centralizadas de la aplicación."""

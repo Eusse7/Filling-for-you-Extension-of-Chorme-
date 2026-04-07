@@ -23,49 +23,49 @@ export default function ProfileForm() {
 
       <div className="row2">
         <label>
-          Nombre
+          <span>Nombre</span>
           <input value={profile.firstName} onChange={(e) => setProfile({...profile, firstName: e.target.value})} />
         </label>
         <label>
-          Apellido
+          <span>Apellido</span>
           <input value={profile.lastName} onChange={(e) => setProfile({...profile, lastName: e.target.value})} />
         </label>
       </div>
 
       <div className="row2">
         <label>
-          Email
+          <span>Email</span>
           <input value={profile.email} onChange={(e) => setProfile({...profile, email: e.target.value})} />
         </label>
         <label>
-          Teléfono
+          <span>Teléfono</span>
           <input value={profile.phone} onChange={(e) => setProfile({...profile, phone: e.target.value})} />
         </label>
       </div>
 
       <label>
-        Dirección
+        <span>Dirección</span>
         <input value={profile.addressLine1} onChange={(e) => setProfile({...profile, addressLine1: e.target.value})} />
       </label>
 
       <div className="row2">
         <label>
-          Ciudad
+          <span>Ciudad</span>
           <input value={profile.city} onChange={(e) => setProfile({...profile, city: e.target.value})} />
         </label>
         <label>
-          País
+          <span>País</span>
           <input value={profile.country} onChange={(e) => setProfile({...profile, country: e.target.value})} />
         </label>
       </div>
 
       <div className="row2">
         <label>
-          LinkedIn
+          <span>LinkedIn</span>
           <input value={profile.linkedin} onChange={(e) => setProfile({...profile, linkedin: e.target.value})} />
         </label>
         <label>
-          GitHub
+          <span>GitHub</span>
           <input value={profile.github} onChange={(e) => setProfile({...profile, github: e.target.value})}
           />
         </label>

@@ -9,26 +9,16 @@
   <body>
     <h3>Filling for you</h3>
 
-    <div class="row">
-      <label><input type="checkbox" id="safe" checked /> Modo seguro</label>
+    <div class="muted">
+      Para actualizar tus datos, ve a tu perfil en la web. Si no has iniciado sesión, te llevará a login.
     </div>
 
     <div class="row">
-      <input id="token" type="text" placeholder="token (demo-token)" />
-      <button id="saveToken">Guardar</button>
-    </div>
-
-    <div class="muted">Funciona sobre <b>http://localhost:5173</b> o <b>http://127.0.0.1:5173</b></div>
-
-    <div class="row">
-      <button id="scan">Escanear</button>
+      <button id="openProfile">Ir a mi perfil</button>
       <button id="fill">Previsualizar/Llenar</button>
     </div>
 
-    <div class="row">
-      <button id="showLogs">Ver bitácora</button>
-      <button id="clearLogs">Borrar bitácora</button>
-    </div>
+    <pre id="out" class="muted"></pre>
 
     <script src="popup.js"></script>
   </body>

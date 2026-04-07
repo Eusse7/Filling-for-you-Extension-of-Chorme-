@@ -21,16 +21,20 @@ export default function KnowledgeForm() {
     >
       <p className="muted">Estado: {status}</p>
 
-      <label>Cuéntanos sobre ti
+      <label>
+        <span>Cuéntanos sobre ti</span>
         <textarea rows={4} value={knowledge.about_me} onChange={(e)=>setKnowledge({...knowledge, about_me:e.target.value})} />
       </label>
-      <label>Fortalezas
+      <label>
+        <span>Fortalezas</span>
         <textarea rows={3} value={knowledge.strengths} onChange={(e)=>setKnowledge({...knowledge, strengths:e.target.value})} />
       </label>
-      <label>Expectativa salarial
+      <label>
+        <span>Expectativa salarial</span>
         <textarea rows={2} value={knowledge.salary_expectation} onChange={(e)=>setKnowledge({...knowledge, salary_expectation:e.target.value})} />
       </label>
-      <label>Carta/introducción
+      <label>
+        <span>Carta/introducción</span>
         <textarea rows={4} value={knowledge.cover_letter} onChange={(e)=>setKnowledge({...knowledge, cover_letter:e.target.value})} />
       </label>
     </Card>

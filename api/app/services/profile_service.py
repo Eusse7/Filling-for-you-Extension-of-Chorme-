@@ -6,7 +6,18 @@ class ProfileService:
         self._repo = repo
 
     def get_profile(self) -> Profile:
-        return self._repo.get()
+        perfil = self._repo.get()
+        if perfil is None:
+            return Profile()
+
+        if isinstance(perfil, Profile):
+            return perfil
+
+        try:
+            return Profile.model_validate(perfil)
+        except Exception:
+            return Profile()
 
     def update_profile(self, profile: Profile) -> Profile:
-        return self._repo.set(profile)
+        perfil_actualizado = self._repo.set(profile)
+        return perfil_actualizado

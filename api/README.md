@@ -20,5 +20,13 @@ Endpoints:
 - GET `/health`
 
 Persistencia:
-- Los datos de `profile`, `knowledge` y `logs` se guardan en `api/data/store.json`.
-- No se pierden al reiniciar el backend (salvo que borres ese archivo).
+- Los datos de `profile`, `knowledge` y `logs` se guardan en PostgreSQL.
+- Estructura principal:
+	- `users`
+	- `user_profiles`
+	- `user_knowledge`
+	- `app_logs`
+
+Variables de entorno útiles:
+- `DATABASE_URL`: URL SQLAlchemy (ejemplo `postgresql+psycopg://autofill:autofill@db:5432/autofill`)
+- `BOOTSTRAP_USER_EMAIL`: usuario inicial técnico para compatibilidad de endpoints actuales

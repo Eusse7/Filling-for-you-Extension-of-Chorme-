@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Test - Filling for you</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Segoe UI, Arial, sans-serif;
+        background: #f6f7f9;
+        color: #1f2937;
+      }
+
+      .wrap {
+        max-width: 980px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+      }
+
+      .muted {
+        color: #6b7280;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 14px;
+      }
+
+      .row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      label {
+        display: block;
+        margin: 8px 0;
+        font-size: 14px;
+      }
+
+      input, textarea {
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 4px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 8px;
+        font: inherit;
+      }
+
+      button {
+        border: none;
+        border-radius: 8px;
+        background: #0f766e;
+        color: #fff;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+
+      @media (max-width: 640px) {
+        .row2 {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Formularios de prueba</h1>
+      <p class="muted">Página standalone para probar Escaneo/Previsualizar/Llenar de la extensión.</p>
+
+      <div class="grid">
+        <section class="card">
+          <h3>Formulario A (autocomplete)</h3>
+          <div class="row2">
+            <label>Nombre<input name="firstName" autocomplete="on" placeholder="Juan" /></label>
+            <label>Apellido<input name="lastName" autocomplete="on" placeholder="Perez" /></label>
+          </div>
+          <div class="row2">
+            <label>Email<input type="email" name="email" autocomplete="email" /></label>
+            <label>Telefono<input type="tel" name="phone" autocomplete="tel" /></label>
+          </div>
+          <label>Direccion<input name="address1" autocomplete="on" /></label>
+          <div class="row2">
+            <label>Ciudad<input name="city" autocomplete="on" /></label>
+            <label>Pais<input name="country" autocomplete="on" /></label>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>Formulario B (sin autocomplete)</h3>
+          <div class="row2">
+            <label>Full name<input id="full_name" name="full_name" placeholder="Nombre completo" /></label>
+            <label>Mobile<input id="mobile_number" name="mobile_number" placeholder="Celular" /></label>
+          </div>
+          <div class="row2">
+            <label>Email address<input id="emailAddress" name="emailAddress" /></label>
+            <label>City of residence<input id="cityResidence" name="cityResidence" /></label>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>Formulario C (knowledge)</h3>
+          <label>Cuentanos sobre ti<textarea name="about" rows="4"></textarea></label>
+          <label>Fortalezas<textarea name="strengths" rows="3"></textarea></label>
+          <label>Expectativa salarial<textarea name="salary" rows="2"></textarea></label>
+          <label>Carta / introduccion<textarea name="coverLetter" rows="4"></textarea></label>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

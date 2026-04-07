@@ -1,15 +1,18 @@
 from __future__ import annotations
-from typing import List
+
 from .base import ProfileRepository, KnowledgeRepository, LogRepository
+from ..metadata.store import StoreMetadata
 from ..schemas.profile import Profile
 from ..schemas.knowledge import Knowledge
+
 
 class InMemoryProfileRepo(ProfileRepository):
     def __init__(self) -> None:
         self._profile = Profile()
 
     def get(self) -> Profile:
-        return self._profile
+        perfil = self._profile
+        return perfil
 
     def set(self, profile: Profile) -> Profile:
         self._profile = profile
@@ -20,21 +23,26 @@ class InMemoryKnowledgeRepo(KnowledgeRepository):
         self._knowledge = Knowledge()
 
     def get(self) -> Knowledge:
-        return self._knowledge
+        conocimiento = self._knowledge
+        return conocimiento
 
     def set(self, knowledge: Knowledge) -> Knowledge:
         self._knowledge = knowledge
         return self._knowledge
 
 class InMemoryLogRepo(LogRepository):
-    def __init__(self, max_items: int = 500) -> None:
+    def __init__(
+        self,
+        max_items: int = StoreMetadata.default_logs_max_items,
+    ) -> None:
         self._max = max_items
-        self._items: List[dict] = []
+        self._items: list = []
 
     def add(self, event: dict) -> None:
         self._items.append(event)
         if len(self._items) > self._max:
             self._items.pop(0)
 
-    def list(self) -> List[dict]:
-        return list(self._items)
+    def list(self) -> list:
+        items = list(self._items)
+        return items

@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { api } from "../../api/client.js";
 
+const EMPTY_KNOWLEDGE = {
+  about_me: "",
+  strengths: "",
+  salary_expectation: "",
+  cover_letter: ""
+};
+
 export function useKnowledge() {
   const [knowledge, setKnowledge] = useState(null);
   const [status, setStatus] = useState("");
@@ -10,10 +17,11 @@ export function useKnowledge() {
       try {
         setStatus("Cargando conocimiento...");
         const k = await api.get("/knowledge");
-        setKnowledge(k);
+        setKnowledge(k ?? EMPTY_KNOWLEDGE);
         setStatus("Listo.");
       } catch (e) {
-        setStatus(String(e));
+        setKnowledge(EMPTY_KNOWLEDGE);
+        setStatus(`No se pudo cargar desde API. Puedes completar y guardar manualmente. (${String(e)})`);
       }
     })();
   }, []);
