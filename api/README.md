@@ -10,9 +10,10 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 3000
 ```
 
-Token demo: `demo-token`
-
 Endpoints:
+- POST `/auth/register`
+- POST `/auth/login`
+- GET `/auth/me`
 - GET/PUT `/profile`
 - GET/PUT `/knowledge`
 - POST `/logs`
@@ -29,4 +30,6 @@ Persistencia:
 
 Variables de entorno útiles:
 - `DATABASE_URL`: URL SQLAlchemy (ejemplo `postgresql+psycopg://autofill:autofill@db:5432/autofill`)
-- `BOOTSTRAP_USER_EMAIL`: usuario inicial técnico para compatibilidad de endpoints actuales
+- `JWT_SECRET`: secreto para firmar los access tokens JWT
+- `JWT_ALGORITHM`: algoritmo JWT (default `HS256`)
+- `JWT_EXP_MINUTES`: tiempo de expiración del token en minutos

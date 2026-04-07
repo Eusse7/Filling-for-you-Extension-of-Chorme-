@@ -1,8 +1,19 @@
-body { font-family: system-ui, Arial, sans-serif; width: 340px; margin: 0; padding: 12px; }
+body { font-family: system-ui, Arial, sans-serif; width: 340px; margin: 0; padding: 12px; color: #111827; }
 h3 { margin: 0 0 8px; }
 .row { display:flex; gap: 8px; align-items: center; margin: 10px 0; }
 input[type="text"] { flex: 1; padding: 8px 10px; border-radius: 10px; border: 1px solid #ddd; }
-button { padding: 9px 10px; border-radius: 10px; border: 1px solid #ddd; background: #f7f7f7; cursor: pointer; }
+button {
+	padding: 9px 10px;
+	border-radius: 10px;
+	border: 1px solid #d1d5db;
+	background: #f3f4f6;
+	color: #111827;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.2;
+	cursor: pointer;
+}
+.row button { flex: 1; }
 button:hover { filter: brightness(0.98); }
 label { display:flex; gap: 8px; align-items: center; }
 .muted { opacity: .7; font-size: 12px; }

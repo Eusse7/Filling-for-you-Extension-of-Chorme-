@@ -1,5 +1,5 @@
 const out = document.getElementById("out");
-const PROFILE_URL = "http://localhost:5173/";
+const DEFAULT_PROFILE_URL = "http://localhost:5173/";
 
 async function getActiveTab() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -11,7 +11,20 @@ async function sendToContent(tabId, msg) {
 }
 
 document.getElementById("openProfile").onclick = async () => {
-  await chrome.tabs.create({ url: PROFILE_URL });
+  const tab = await getActiveTab();
+  let targetUrl = DEFAULT_PROFILE_URL;
+
+  try {
+    const tabUrl = new URL(tab.url || "");
+    const allowedOrigins = ["http://localhost:5173", "http://127.0.0.1:5173"];
+    if (allowedOrigins.includes(tabUrl.origin)) {
+      targetUrl = `${tabUrl.origin}/`;
+    }
+  } catch {
+    // Si no se puede parsear la URL activa, usa el origen por defecto.
+  }
+
+  await chrome.tabs.create({ url: targetUrl });
 };
 
 document.getElementById("fill").onclick = async () => {

@@ -4,12 +4,16 @@ const API_BASE = "http://localhost:3000";
 
 async function request(path, init = {}) {
   const token = await getToken();
+  const headers = {
+    ...init.headers
+  };
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   const r = await fetch(`${API_BASE}${path}`, {
     ...init,
-    headers: {
-      ...init.headers,
-      Authorization: `Bearer ${token}`
-    }
+    headers
   });
 
   const data = await r.json().catch(() => null);

@@ -1,6 +1,6 @@
 import { apiClient } from "./apiClient.js";
 import { addLocalLog, getLocalLogs } from "./logStore.js";
-import { getToken } from "./storage.js";
+import { getToken, setToken } from "./storage.js";
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   (async () => {
@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           sendResponse({ ok: true, data: await getLocalLogs() });
           return;
         case "SET_TOKEN":
-          await chrome.storage.local.set({ token: msg.token || "demo-token" });
+          await setToken(msg.token || "");
           sendResponse({ ok: true, token: await getToken() });
           return;
         default:

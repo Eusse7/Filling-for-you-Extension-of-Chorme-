@@ -5,8 +5,8 @@ class ProfileService:
     def __init__(self, repo: ProfileRepository) -> None:
         self._repo = repo
 
-    def get_profile(self) -> Profile:
-        perfil = self._repo.get()
+    def get_profile(self, user_id: int) -> Profile:
+        perfil = self._repo.get(user_id)
         if perfil is None:
             return Profile()
 
@@ -18,6 +18,6 @@ class ProfileService:
         except Exception:
             return Profile()
 
-    def update_profile(self, profile: Profile) -> Profile:
-        perfil_actualizado = self._repo.set(profile)
+    def update_profile(self, user_id: int, profile: Profile) -> Profile:
+        perfil_actualizado = self._repo.set(user_id, profile)
         return perfil_actualizado

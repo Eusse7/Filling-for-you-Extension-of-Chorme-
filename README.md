@@ -35,7 +35,7 @@ Abre: http://localhost:5173
 - Edge: `edge://extensions` -> Developer mode -> Load unpacked -> carpeta `extension`
 
 ## 4) Probar
-- En http://localhost:5173 actualiza **Perfil** y **Conocimiento**
+- En http://localhost:5173 crea cuenta/inicia sesión y actualiza **Perfil** y **Conocimiento**
 - Para pruebas de autollenado abre: http://localhost:5173/form-test.html
 - En la extensión usa **Ir a mi perfil** y **Previsualizar/Llenar**
 
@@ -53,5 +53,3 @@ Servicios:
 - Web: http://localhost:5173
 
 La base queda persistida en el volumen `api_data` del `docker-compose.yml`.
-
-Token demo: `demo-token`

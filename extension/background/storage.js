@@ -8,6 +8,10 @@ export const storage = {
 };
 
 export async function getToken() {
-  const { token } = await chrome.storage.local.get({ token: "demo-token" });
-  return token || "demo-token";
+  const { token } = await chrome.storage.local.get({ token: "" });
+  return token || "";
+}
+
+export async function setToken(token) {
+  await chrome.storage.local.set({ token: token || "" });
 }

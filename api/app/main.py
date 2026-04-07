@@ -8,6 +8,7 @@ from .core.config import settings
 from .core.dependencies import (
     get_knowledge_service,
     get_log_service,
+    get_postgres_store,
     get_profile_service,
 )
 from .repositories.postgres import (
@@ -20,6 +21,7 @@ from .services.profile_service import ProfileService
 from .services.knowledge_service import KnowledgeService
 from .services.log_service import LogService
 
+from .routes import auth as auth_routes
 from .routes import logs as logs_routes
 from .routes import knowledge as knowledge_routes
 from .routes import profile as profile_routes
@@ -38,9 +40,9 @@ def create_app() -> FastAPI:
 
     postgres_store = PostgresStore(settings.database_url)
     postgres_store.create_schema()
-    profile_repo = PostgresProfileRepo(postgres_store, settings.bootstrap_user_email)
-    knowledge_repo = PostgresKnowledgeRepo(postgres_store, settings.bootstrap_user_email)
-    log_repo = PostgresLogRepo(postgres_store, settings.bootstrap_user_email)
+    profile_repo = PostgresProfileRepo(postgres_store)
+    knowledge_repo = PostgresKnowledgeRepo(postgres_store)
+    log_repo = PostgresLogRepo(postgres_store)
 
     # Services
     profile_service = ProfileService(profile_repo)
@@ -51,8 +53,10 @@ def create_app() -> FastAPI:
     app.dependency_overrides[get_profile_service] = lambda: profile_service
     app.dependency_overrides[get_knowledge_service] = lambda: knowledge_service
     app.dependency_overrides[get_log_service] = lambda: log_service
+    app.dependency_overrides[get_postgres_store] = lambda: postgres_store
 
     # Routes
+    app.include_router(auth_routes.router)
     app.include_router(profile_routes.router)
     app.include_router(knowledge_routes.router)
     app.include_router(logs_routes.router)

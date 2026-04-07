@@ -32,5 +32,10 @@
   border-radius: 12px;
   border: 1px solid #ddd;
   background: #f7f7f7;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-rendering: geometricPrecision;
   cursor: pointer;
 }

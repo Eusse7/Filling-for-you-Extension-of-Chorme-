@@ -20,7 +20,7 @@ globalThis.Autofill  = globalThis.Autofill  || {};
         <div class="af-sub">Nada se llena hasta que presiones <b>Aplicar</b>.</div>
         <div id="af-list"></div>
         <div class="af-actions">
-          <button id="af-cancel">Cancelar</button>
+          <button id="af-cancel">Cerrar</button>
           <button id="af-apply">Aplicar</button>
         </div>
       </div>

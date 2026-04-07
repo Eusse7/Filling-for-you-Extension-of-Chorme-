@@ -1,6 +1,7 @@
 from ..services.knowledge_service import KnowledgeService
 from ..services.log_service import LogService
 from ..services.profile_service import ProfileService
+from ..repositories.postgres import PostgresStore
 
 
 def get_profile_service() -> ProfileService:
@@ -30,4 +31,10 @@ def get_log_service() -> LogService:
         RuntimeError: Si el override de dependencia no fue configurado.
     """
     mensaje_error = 'LogService dependency not overridden'
+    raise RuntimeError(mensaje_error)
+
+
+def get_postgres_store() -> PostgresStore:
+    """Obtiene el store PostgreSQL inyectado por la aplicación."""
+    mensaje_error = 'PostgresStore dependency not overridden'
     raise RuntimeError(mensaje_error)

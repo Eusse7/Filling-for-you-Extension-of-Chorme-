@@ -1,20 +1,24 @@
 from fastapi import Header, HTTPException
-from .config import settings
+from .auth import AuthUser, decode_access_token
 
 
-def require_auth(authorization: str | None = Header(default=None)) -> str:
-    """Valida el token Bearer de demostración enviado en Authorization.
+def require_auth(authorization: str | None = Header(default=None)) -> AuthUser:
+    """Valida Bearer JWT y retorna el usuario autenticado.
 
     Args:
         authorization: Header Authorization recibido en la petición.
 
-    Returns:
-        El valor del header Authorization validado.
-
     Raises:
-        HTTPException: Si el token es inválido o no fue enviado.
+        HTTPException: Si falta o es inválido el token.
     """
-    if authorization != f'Bearer {settings.demo_token}':
+    if not authorization or not authorization.startswith('Bearer '):
         raise HTTPException(status_code=401, detail='Unauthorized')
 
-    return authorization
+    token = authorization.removeprefix('Bearer ').strip()
+    if not token:
+        raise HTTPException(status_code=401, detail='Unauthorized')
+
+    try:
+        return decode_access_token(token)
+    except Exception:
+        raise HTTPException(status_code=401, detail='Unauthorized')

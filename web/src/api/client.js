@@ -1,13 +1,33 @@
 const API_BASE = import.meta.env.VITE_API_BASE || "/api";
-const TOKEN = "demo-token";
+const TOKEN_KEY = "ffy_access_token";
 
-async function request(path, init = {}) {
+export function getAccessToken() {
+  return localStorage.getItem(TOKEN_KEY) || "";
+}
+
+export function setAccessToken(token) {
+  if (!token) {
+    localStorage.removeItem(TOKEN_KEY);
+    return;
+  }
+  localStorage.setItem(TOKEN_KEY, token);
+}
+
+function buildHeaders(initHeaders = {}, withAuth = true) {
+  const headers = { ...initHeaders };
+  if (withAuth) {
+    const token = getAccessToken();
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return headers;
+}
+
+async function request(path, init = {}, withAuth = true) {
   const r = await fetch(`${API_BASE}${path}`, {
     ...init,
-    headers: {
-      ...init.headers,
-      Authorization: `Bearer ${TOKEN}`
-    }
+    headers: buildHeaders(init.headers, withAuth)
   });
 
   if (!r.ok) {
@@ -31,10 +51,32 @@ async function request(path, init = {}) {
 
 export const api = {
   get: (path) => request(path),
+  post: (path, body) =>
+    request(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify(body)
+    }),
   put: (path, body) =>
     request(path, {
       method: "PUT",
       headers: { "Content-Type": "application/json; charset=utf-8" },
       body: JSON.stringify(body)
     })
+};
+
+export const authApi = {
+  register: (payload) =>
+    request("/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify(payload)
+    }, false),
+  login: (payload) =>
+    request("/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify(payload)
+    }, false),
+  me: () => request("/auth/me")
 };
