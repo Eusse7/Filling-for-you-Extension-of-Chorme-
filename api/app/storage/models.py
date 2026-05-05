@@ -119,3 +119,28 @@ class AppLog(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey(USERS_FK, ondelete='CASCADE'), index=True)
     event_json: Mapped[str] = mapped_column(Text, nullable=False)
     ts: Mapped[str | None] = mapped_column(String(60), nullable=True)
+
+class UserAutofillHistory(Base):
+    __tablename__ = 'user_autofill_history'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey(USERS_FK, ondelete='CASCADE'), index=True)
+    url: Mapped[str] = mapped_column(String(2048), nullable=False)
+    title: Mapped[str] = mapped_column(String(512), nullable=False, default='')
+    filled_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+
+class UserBlacklist(Base):
+    __tablename__ = 'user_blacklist'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey(USERS_FK, ondelete='CASCADE'), index=True)
+    domain: Mapped[str] = mapped_column(String(255), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )

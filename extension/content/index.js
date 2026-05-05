@@ -37,7 +37,7 @@ globalThis.Autofill  = globalThis.Autofill  || {};
         return tokenFromPage;
       }
 
-      if (WEB_ORIGINS.has(window.location.origin)) {
+      if (WEB_ORIGINS.has(globalThis.location.origin)) {
         await chrome.runtime.sendMessage({ type: "SET_TOKEN", token: "" });
         return "";
       }
@@ -64,6 +64,19 @@ globalThis.Autofill  = globalThis.Autofill  || {};
       chrome.runtime.sendMessage({ type: "SET_TOKEN", token: event.data.token });
     }
   });
+
+  async function checkBlacklist() {
+    try {
+      const currentDomain = location.hostname;
+      const bl = await chrome.runtime.sendMessage({ type: "GET_BLACKLIST" });
+      if (bl?.ok && Array.isArray(bl.data)) {
+        return bl.data.some(b => currentDomain === b.domain || currentDomain.endsWith("." + b.domain));
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }
 
   ns.submitGuard.installSubmitGuard(
     () => !!pendingPlan,
@@ -127,17 +140,26 @@ globalThis.Autofill  = globalThis.Autofill  || {};
         if (!pendingPlan) return;
         ns.apply.applyPlan(pendingPlan);
         ns.logger?.log("APPLY_CONFIRMED", { meta: { count: pendingPlan.length } });
+        chrome.runtime.sendMessage({ type: "RECORD_HISTORY", url: globalThis.location.href, title: document.title });
         pendingPlan = null;
       }
     );
   }
 
   async function handlePreviewAndFill() {
+    const isBlacklisted = await checkBlacklist();
+    if (isBlacklisted) {
+      alert("La extensión Filling-for-you está desactivada en este sitio.");
+      ns.logger?.log("BLACKLISTED_SITE", { meta: { domain: location.hostname } });
+      return { ok: false, error: "Blacklisted site" };
+    }
+
     const plan = await buildPlanFromPage();
     if (safeModeEnabled) previewPlan(plan);
     else {
       ns.apply.applyPlan(plan);
       ns.logger?.log("APPLY_DIRECT", { meta: { count: plan.length } });
+      chrome.runtime.sendMessage({ type: "RECORD_HISTORY", url: globalThis.location.href, title: document.title });
     }
     return { ok: true, mode: safeModeEnabled ? "preview" : "direct", count: plan.length };
   }
@@ -160,6 +182,11 @@ globalThis.Autofill  = globalThis.Autofill  || {};
           case "SET_SAFE_MODE": {
             safeModeEnabled = !!msg.safeMode;
             sendResponse({ ok: true, safeMode: safeModeEnabled });
+            return;
+          }
+          case "CLEAR_FIELDS": {
+            ns.apply.clearFilledFields?.();
+            sendResponse({ ok: true });
             return;
           }
           default:

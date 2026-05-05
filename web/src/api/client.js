@@ -67,7 +67,20 @@ export const api = {
       headers: { "Content-Type": "application/json; charset=utf-8" },
       body: JSON.stringify(body)
     }),
-  delete: (path) => request(path, { method: "DELETE" })
+  delete: (path) => request(path, { method: "DELETE" }),
+  getHistory: () => request("/history"),
+  recordHistory: (body) => request("/history", {
+    method: "POST",
+    headers: { "Content-Type": "application/json; charset=utf-8" },
+    body: JSON.stringify(body)
+  }),
+  getBlacklist: () => request("/blacklist"),
+  addBlacklist: (body) => request("/blacklist", {
+    method: "POST",
+    headers: { "Content-Type": "application/json; charset=utf-8" },
+    body: JSON.stringify(body)
+  }),
+  removeBlacklist: (id) => request(`/blacklist/${id}`, { method: "DELETE" })
 };
 
 export const authApi = {

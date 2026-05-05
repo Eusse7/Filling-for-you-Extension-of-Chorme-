@@ -16,15 +16,29 @@ globalThis.Autofill  = globalThis.Autofill  || {};
     });
   }
 
+  let lastAppliedFields = [];
+
   function applyPlan(plan) {
+    lastAppliedFields = [];
     for (const item of plan) {
       const sel = item.field.selectorHint;
       if (!sel) continue;
       const el = document.querySelector(sel);
       if (!el) continue;
       setValue(el, item.value);
+      lastAppliedFields.push(el);
     }
   }
 
-  ns.apply = { applyPlan };
+  function clearFilledFields() {
+    for (const el of lastAppliedFields) {
+      if (el) {
+        setValue(el, "");
+      }
+    }
+    ns.logger?.log("CLEAR_FIELDS", { meta: { count: lastAppliedFields.length } });
+    lastAppliedFields = [];
+  }
+
+  ns.apply = { applyPlan, clearFilledFields };
 })(globalThis.Autofill );

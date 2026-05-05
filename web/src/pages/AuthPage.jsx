@@ -78,10 +78,10 @@ function formatValidationError(detail) {
     const messages = [];
 
     if (issues.some((issue) => issue?.loc?.includes?.("email"))) {
-      messages.push("Ingresa un email valido.");
+      messages.push("Ingresa un email válido.");
     }
     if (issues.some((issue) => issue?.loc?.includes?.("password"))) {
-      messages.push("La contrasena debe tener al menos 8 caracteres.");
+      messages.push("La contraseña debe tener al menos 8 caracteres.");
     }
     return messages.length > 0 ? messages.join(" ") : "Revisa los datos e intenta de nuevo.";
   } catch (parseError) {
@@ -93,7 +93,7 @@ function formatValidationError(detail) {
 function formatModeSpecificError(mode, status) {
   switch (mode) {
     case "login":
-      return status === 401 ? "Correo o contrasena incorrectos." : null;
+      return status === 401 ? "Correo o contraseña incorrectos." : null;
     case "register":
       return status === 409 ? "El correo ya esta registrado." : null;
     case "reset-request":
@@ -102,8 +102,8 @@ function formatModeSpecificError(mode, status) {
         : "No pudimos procesar la solicitud. Intenta de nuevo.";
     case "reset-confirm":
       return status === 400
-        ? "El codigo o el correo no son validos."
-        : "No pudimos actualizar la contrasena. Intenta de nuevo.";
+        ? "El código o el correo no son válidos."
+        : "No pudimos actualizar la contraseña. Intenta de nuevo.";
     default:
       return null;
   }
@@ -118,7 +118,7 @@ function formatAuthError(mode, error) {
 
   const details = extractErrorDetails(rawMessage);
   if (!details) {
-    return "Ocurrio un error. Intenta de nuevo.";
+    return "Ocurrió un error. Intenta de nuevo.";
   }
 
   const { status, detail } = details;
@@ -133,15 +133,15 @@ function formatAuthError(mode, error) {
   }
 
   if (status >= 500) {
-    return "Ocurrio un error en el servidor. Intenta de nuevo.";
+    return "Ocurrió un error en el servidor. Intenta de nuevo.";
   }
 
   const detailLower = detail.toLowerCase();
   if (detailLower.includes("invalid") || detailLower.includes("credenciales")) {
-    return "Correo o contrasena incorrectos.";
+    return "Correo o contraseña incorrectos.";
   }
 
-  return "Ocurrio un error. Intenta de nuevo.";
+  return "Ocurrió un error. Intenta de nuevo.";
 }
 
 function ResetRequestInfo({ setMode }) {

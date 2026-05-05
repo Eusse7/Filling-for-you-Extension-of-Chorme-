@@ -2,6 +2,8 @@ from typing import Protocol
 
 from ..schemas.profile import Profile
 from ..schemas.knowledge import Knowledge
+from ..schemas.history import AutofillHistoryCreate, AutofillHistoryResponse
+from ..schemas.blacklist import BlacklistResponse
 
 
 class ProfileRepository(Protocol):
@@ -20,3 +22,15 @@ class LogRepository(Protocol):
     def add(self, user_id: int, event: dict) -> None: ...
 
     def list(self, user_id: int) -> list: ...
+
+class HistoryRepository(Protocol):
+    def add(self, user_id: int, history: AutofillHistoryCreate) -> AutofillHistoryResponse: ...
+
+    def list(self, user_id: int, max_items: int = 10) -> list[AutofillHistoryResponse]: ...
+
+class BlacklistRepository(Protocol):
+    def add(self, user_id: int, domain: str) -> BlacklistResponse: ...
+
+    def list(self, user_id: int) -> list[BlacklistResponse]: ...
+    
+    def delete(self, user_id: int, item_id: int) -> bool: ...

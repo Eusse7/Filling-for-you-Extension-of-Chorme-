@@ -54,7 +54,7 @@ globalThis.Autofill  = globalThis.Autofill  || {};
 
   function scanFormFields(root = document) {
     const els = Array.from(root.querySelectorAll("input, textarea, select"))
-      .filter(el => !el.disabled && el.type !== "hidden");
+      .filter(el => !el.disabled && el.type !== "hidden" && el.type !== "password");
     
     // Guardar referencias a los elementos para acceso posterior
     cachedElements = els;

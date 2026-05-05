@@ -52,9 +52,42 @@ document.getElementById("openProfile").onclick = async () => {
   await chrome.tabs.create({ url: targetUrl });
 };
 
+document.getElementById("clearFields").onclick = async () => {
+  try {
+    const tab = await getActiveTab();
+    await sendToContent(tab.id, { type: "CLEAR_FIELDS" });
+  } catch (e) {
+    console.error("No se pudo limpiar los campos", e);
+  }
+};
+
 document.getElementById("fill").onclick = async () => {
   const tab = await getActiveTab();
   const targetUrl = resolveWebUrl(tab);
+
+  try {
+    const bgResponse = await chrome.runtime.sendMessage({ type: "GET_BLACKLIST" });
+    if (bgResponse?.ok && Array.isArray(bgResponse.data)) {
+      const currentUrl = new URL(tab.url || "http://localhost");
+      let currentDomain = currentUrl.hostname;
+      
+      const isBlacklisted = bgResponse.data.some(b => {
+        return currentDomain === b.domain || currentDomain.endsWith("." + b.domain);
+      });
+      
+      if (isBlacklisted) {
+        document.getElementById("blacklist-warning").style.display = "block";
+        document.getElementById("fill").disabled = true;
+        document.getElementById("fill").style.opacity = "0.5";
+        document.getElementById("fill").style.cursor = "not-allowed";
+        document.getElementById("fill").title = "La extensión está desactivada en este sitio";
+        return;
+      }
+    }
+  } catch (err) {
+    console.error("Error checking blacklist in popup", err);
+  }
+
   try {
     const stored = await chrome.runtime.sendMessage({ type: "GET_TOKEN" });
     if (!stored?.token) {

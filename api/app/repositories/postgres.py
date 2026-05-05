@@ -6,10 +6,12 @@ from datetime import datetime, timezone
 from sqlalchemy import create_engine, delete, select
 from sqlalchemy.orm import Session, sessionmaker
 
-from .base import KnowledgeRepository, LogRepository, ProfileRepository
+from .base import KnowledgeRepository, LogRepository, ProfileRepository, HistoryRepository, BlacklistRepository
 from ..schemas.knowledge import Knowledge
 from ..schemas.profile import Profile
-from ..storage.models import AppLog, Base, User, UserKnowledge, UserProfile
+from ..schemas.history import AutofillHistoryCreate, AutofillHistoryResponse
+from ..schemas.blacklist import BlacklistResponse
+from ..storage.models import AppLog, Base, User, UserKnowledge, UserProfile, UserAutofillHistory, UserBlacklist
 
 
 class PostgresStore:
@@ -205,3 +207,93 @@ class PostgresLogRepo(LogRepository):
             except json.JSONDecodeError:
                 continue
         return events
+
+
+class PostgresHistoryRepo(HistoryRepository):
+    def __init__(self, store: PostgresStore) -> None:
+        self._store = store
+
+    def add(self, user_id: int, history: AutofillHistoryCreate) -> AutofillHistoryResponse:
+        with self._store.new_session() as session:
+            new_history = UserAutofillHistory(
+                user_id=user_id,
+                url=history.url,
+                title=history.title,
+            )
+            session.add(new_history)
+            session.commit()
+            
+            return AutofillHistoryResponse(
+                id=new_history.id,
+                url=new_history.url,
+                title=new_history.title,
+                filled_at=new_history.filled_at
+            )
+
+    def list(self, user_id: int, max_items: int = 10) -> list[AutofillHistoryResponse]:
+        with self._store.new_session() as session:
+            rows = session.scalars(
+                select(UserAutofillHistory)
+                .where(UserAutofillHistory.user_id == user_id)
+                .order_by(UserAutofillHistory.filled_at.desc())
+                .limit(max_items)
+            ).all()
+
+        return [
+            AutofillHistoryResponse(
+                id=row.id,
+                url=row.url,
+                title=row.title,
+                filled_at=row.filled_at
+            )
+            for row in rows
+        ]
+
+class PostgresBlacklistRepo(BlacklistRepository):
+    def __init__(self, store: PostgresStore) -> None:
+        self._store = store
+
+    def add(self, user_id: int, domain: str) -> BlacklistResponse:
+        with self._store.new_session() as session:
+            new_item = UserBlacklist(
+                user_id=user_id,
+                domain=domain,
+            )
+            session.add(new_item)
+            session.commit()
+            
+            return BlacklistResponse(
+                id=new_item.id,
+                domain=new_item.domain,
+                created_at=new_item.created_at
+            )
+
+    def list(self, user_id: int) -> list[BlacklistResponse]:
+        with self._store.new_session() as session:
+            rows = session.scalars(
+                select(UserBlacklist)
+                .where(UserBlacklist.user_id == user_id)
+                .order_by(UserBlacklist.created_at.desc())
+            ).all()
+
+        return [
+            BlacklistResponse(
+                id=row.id,
+                domain=row.domain,
+                created_at=row.created_at
+            )
+            for row in rows
+        ]
+
+    def delete(self, user_id: int, item_id: int) -> bool:
+        with self._store.new_session() as session:
+            item = session.scalar(
+                select(UserBlacklist)
+                .where(UserBlacklist.user_id == user_id, UserBlacklist.id == item_id)
+            )
+            if not item:
+                return False
+
+            session.execute(delete(UserBlacklist).where(UserBlacklist.id == item_id))
+            session.commit()
+            return True

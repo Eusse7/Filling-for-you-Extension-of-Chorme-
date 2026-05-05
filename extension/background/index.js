@@ -18,6 +18,17 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           await apiClient.post("/logs", msg.payload);
           sendResponse({ ok: true });
           return;
+        }        case "RECORD_HISTORY": {
+          await apiClient.post("/history", {
+            url: msg.url,
+            title: msg.title
+          });
+          sendResponse({ ok: true });
+          return;
+        }        
+        case "GET_BLACKLIST": {
+          sendResponse(await apiClient.get("/blacklist"));
+          return;
         }
         case "GET_LOCAL_LOGS":
           sendResponse({ ok: true, data: await getLocalLogs() });

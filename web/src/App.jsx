@@ -88,7 +88,7 @@ export default function App() {
       </footer>
 
       {showDeleteConfirm && (
-        <div className="modalOverlay" role="dialog" aria-modal="true">
+        <dialog className="modalOverlay" aria-modal="true">
           <div className="modal">
             <h3>¿Eliminar cuenta?</h3>
             <p>Esta accion es permanente y borrara tus datos en la base de datos.</p>
@@ -105,7 +105,7 @@ export default function App() {
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </div>
   );
