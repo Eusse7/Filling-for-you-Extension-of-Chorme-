@@ -26,10 +26,12 @@ globalThis.Autofill = globalThis.Autofill || {};
     };
   }
 
-  function buildPlan(fields, profile, knowledge, guessKeyFn) {
+  function buildPlan(fields, profile, knowledge, guessKeyFn, fieldElements = null) {
     const map = buildValueMap(profile, knowledge);
-    return fields.map(f => {
-      const key = guessKeyFn(f);
+    return fields.map((f, index) => {
+      // Pasar contexto adicional a guessKeyFn para mejor clasificación
+      const fieldElement = fieldElements ? fieldElements[index] : null;
+      const key = guessKeyFn(f, fieldElement, fields, index);
       const value = key ? map[key] : null;
       return value ? { field: f, key, value } : null;
     }).filter(Boolean);

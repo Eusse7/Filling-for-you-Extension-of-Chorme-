@@ -46,6 +46,10 @@ async function request(path, init = {}, withAuth = true) {
     throw new Error(`HTTP ${r.status}: ${message}`);
   }
 
+  if (r.status === 204) {
+    return null;
+  }
+
   return r.json();
 }
 
@@ -62,7 +66,8 @@ export const api = {
       method: "PUT",
       headers: { "Content-Type": "application/json; charset=utf-8" },
       body: JSON.stringify(body)
-    })
+    }),
+  delete: (path) => request(path, { method: "DELETE" })
 };
 
 export const authApi = {
@@ -78,5 +83,17 @@ export const authApi = {
       headers: { "Content-Type": "application/json; charset=utf-8" },
       body: JSON.stringify(payload)
     }, false),
-  me: () => request("/auth/me")
+  me: () => request("/auth/me"),
+  requestPasswordReset: (payload) =>
+    request("/auth/password-reset/request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify(payload)
+    }, false),
+  confirmPasswordReset: (payload) =>
+    request("/auth/password-reset/confirm", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify(payload)
+    }, false)
 };

@@ -23,19 +23,47 @@ globalThis.Autofill  = globalThis.Autofill  || {};
     cover_letter: ""
   };
 
+  const WEB_ORIGINS = new Set(["http://localhost:5173", "http://127.0.0.1:5173"]);
+
   async function syncTokenFromPage() {
     try {
-      const token =
+      const tokenFromPage =
         localStorage.getItem("ffy_access_token") ||
         sessionStorage.getItem("ffy_access_token") ||
         "";
-      await chrome.runtime.sendMessage({ type: "SET_TOKEN", token });
-      return token;
+
+      if (tokenFromPage) {
+        await chrome.runtime.sendMessage({ type: "SET_TOKEN", token: tokenFromPage });
+        return tokenFromPage;
+      }
+
+      if (WEB_ORIGINS.has(window.location.origin)) {
+        await chrome.runtime.sendMessage({ type: "SET_TOKEN", token: "" });
+        return "";
+      }
+
+      const stored = await chrome.runtime.sendMessage({ type: "GET_TOKEN" });
+      return stored?.ok ? (stored.token || "") : "";
     } catch {
       // Ignora errores de sincronización para no bloquear el flujo principal.
       return "";
     }
   }
+
+  window.addEventListener("message", (event) => {
+    if (event.source !== window) return;
+    if (!WEB_ORIGINS.has(event.origin)) return;
+    const messageType = event.data?.type;
+
+    if (messageType === "FFY_LOGOUT") {
+      chrome.runtime.sendMessage({ type: "SET_TOKEN", token: "" });
+      return;
+    }
+
+    if (messageType === "FFY_LOGIN" && event.data?.token) {
+      chrome.runtime.sendMessage({ type: "SET_TOKEN", token: event.data.token });
+    }
+  });
 
   ns.submitGuard.installSubmitGuard(
     () => !!pendingPlan,
@@ -80,8 +108,9 @@ globalThis.Autofill  = globalThis.Autofill  || {};
 
   async function buildPlanFromPage() {
     const fields = ns.scan.scanFormFields();
+    const fieldElements = ns.scan.getCachedElements();
     const { profile, knowledge } = await fetchProfileAndKnowledge();
-    const plan = ns.plan.buildPlan(fields, profile, knowledge, ns.classify.guessKey);
+    const plan = ns.plan.buildPlan(fields, profile, knowledge, ns.classify.guessKey, fieldElements);
     ns.logger?.log("PLAN_BUILT", { meta: { count: plan.length, safeMode: safeModeEnabled } });
     return plan;
   }

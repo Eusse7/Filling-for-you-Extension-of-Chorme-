@@ -19,6 +19,14 @@ class Settings(BaseModel):
         'ALLOWED_ORIGIN_REGEX',
         r'^https?://(localhost|127\.0\.0\.1)(:\d+)?$|^chrome-extension://[a-z]+$|^edge-extension://[a-z]+$',
     )
+    smtp_host: str = os.getenv('SMTP_HOST', 'localhost')
+    smtp_port: int = int(os.getenv('SMTP_PORT', '1025'))
+    smtp_username: str = os.getenv('SMTP_USERNAME', '')
+    smtp_password: str = os.getenv('SMTP_PASSWORD', '')
+    smtp_from_email: str = os.getenv('SMTP_FROM_EMAIL', 'no-reply@fillingforyou.local')
+    smtp_use_tls: bool = os.getenv('SMTP_USE_TLS', 'false').lower() == 'true'
+    password_reset_code_minutes: int = int(os.getenv('PASSWORD_RESET_CODE_MINUTES', '10'))
+    password_reset_code_max_attempts: int = int(os.getenv('PASSWORD_RESET_CODE_MAX_ATTEMPTS', '5'))
 
 
 settings = Settings()

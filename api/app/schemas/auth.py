@@ -23,3 +23,21 @@ class MeResponse(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
+
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+
+class PasswordResetRequestResponse(BaseModel):
+    detail: str = 'Si la cuenta existe, te hemos enviado un código de verificación al correo.'
+
+
+class PasswordResetConfirmRequest(BaseModel):
+    email: EmailStr
+    code: str = Field(min_length=6, max_length=6)
+    new_password: str = Field(min_length=8, max_length=128)
+
+
+class PasswordResetConfirmResponse(BaseModel):
+    detail: str = 'Contraseña actualizada correctamente.'

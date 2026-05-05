@@ -8,11 +8,6 @@ export default function AdminPage() {
     <div className="grid">
       <ProfileForm />
       <KnowledgeForm />
-      <Card title="Nota" subtitle="Demo local (token fijo)">
-        <p className="muted">
-          Esto está pensado como demo. En producción, reemplaza el token fijo por login real.
-        </p>
-      </Card>
     </div>
   );
 }

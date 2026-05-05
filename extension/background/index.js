@@ -26,6 +26,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           await setToken(msg.token || "");
           sendResponse({ ok: true, token: await getToken() });
           return;
+        case "GET_TOKEN":
+          sendResponse({ ok: true, token: await getToken() });
+          return;
         default:
           sendResponse({ ok: false, error: "Unknown message type" });
           return;

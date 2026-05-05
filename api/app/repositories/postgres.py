@@ -23,6 +23,16 @@ class PostgresStore:
     def new_session(self) -> Session:
         return self._session_factory()
 
+    def delete_user_account(self, user_id: int) -> bool:
+        with self.new_session() as session:
+            user = session.scalar(select(User).where(User.id == user_id))
+            if not user:
+                return False
+
+            session.execute(delete(User).where(User.id == user_id))
+            session.commit()
+            return True
+
 
 class PostgresProfileRepo(ProfileRepository):
     def __init__(self, store: PostgresStore) -> None:

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba: Clasificación de Campos Multiidioma</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .forms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .form-card:hover {
+            transform: translateY(-5px);
+        }
+        .form-card h2 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+            font-size: 0.9em;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .attribute-badge {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .test-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        .test-button:hover {
+            transform: scale(1.02);
+        }
+        .test-button:active {
+            transform: scale(0.98);
+        }
+        .instructions {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .instructions h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .instructions ol {
+            margin-left: 20px;
+            color: #666;
+            line-height: 1.8;
+        }
+        .code {
+            background: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+        .badge-language {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Prueba de Clasificación de Campos</h1>
+        
+        <div class="instructions">
+            <h3>📖 Cómo Probar el Sistema</h3>
+            <ol>
+                <li>Carga esta página en Chrome con la extensión instalada</li>
+                <li>Abre la consola del navegador (<kbd>F12</kbd> → Tab "Console")</li>
+                <li>Ejecuta el comando: <span class="code">FFYDebug.printReport()</span></li>
+                <li>Verás qué campos detecta la extensión y con qué confianza</li>
+                <li>Prueba con diferentes formatos para ver cómo el sistema maneja variaciones</li>
+            </ol>
+        </div>
+
+        <div class="forms-grid">
+            <!-- Formulario 1: Español (Atributos HTML Estándar) -->
+            <div class="form-card">
+                <h2>✅ Español (HTML5 Estándar)</h2>
+                <span class="badge-language">ES</span>
+                <form autocomplete="on">
+                    <div class="form-group">
+                        <label for="es-email">Correo Electrónico</label>
+                        <input id="es-email" type="email" autocomplete="email" placeholder="tu@email.com">
+                        <div class="attribute-badge">type="email"</div>
+                        <div class="attribute-badge">autocomplete="email"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="es-phone">Teléfono</label>
+                        <input id="es-phone" type="tel" autocomplete="tel" placeholder="123-456-7890">
+                        <div class="attribute-badge">type="tel"</div>
+                        <div class="attribute-badge">autocomplete="tel"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="es-first-name">Nombre</label>
+                        <input id="es-first-name" type="text" autocomplete="given-name">
+                        <div class="attribute-badge">autocomplete="given-name"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="es-last-name">Apellido</label>
+                        <input id="es-last-name" type="text" autocomplete="family-name">
+                        <div class="attribute-badge">autocomplete="family-name"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="es-address">Dirección</label>
+                        <input id="es-address" type="text" autocomplete="address-line1">
+                        <div class="attribute-badge">autocomplete="address-line1"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="es-city">Ciudad</label>
+                        <input id="es-city" type="text" autocomplete="address-level2">
+                        <div class="attribute-badge">autocomplete="address-level2"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="es-country">País</label>
+                        <input id="es-country" type="text" autocomplete="country-name">
+                        <div class="attribute-badge">autocomplete="country-name"</div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Formulario 2: English (Atributos HTML Estándar) -->
+            <div class="form-card">
+                <h2>✅ English (HTML5 Standard)</h2>
+                <span class="badge-language">EN</span>
+                <form autocomplete="on">
+                    <div class="form-group">
+                        <label for="en-email">Email Address</label>
+                        <input id="en-email" type="email" autocomplete="email" placeholder="you@example.com">
+                        <div class="attribute-badge">type="email"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="en-phone">Phone Number</label>
+                        <input id="en-phone" type="tel" autocomplete="tel" placeholder="(555) 123-4567">
+                        <div class="attribute-badge">type="tel"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="en-first-name">First Name</label>
+                        <input id="en-first-name" type="text" autocomplete="given-name">
+                        <div class="attribute-badge">autocomplete="given-name"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="en-last-name">Last Name</label>
+                        <input id="en-last-name" type="text" autocomplete="family-name">
+                        <div class="attribute-badge">autocomplete="family-name"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="en-address">Street Address</label>
+                        <input id="en-address" type="text" autocomplete="address-line1">
+                        <div class="attribute-badge">autocomplete="address-line1"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="en-city">City</label>
+                        <input id="en-city" type="text" autocomplete="address-level2">
+                        <div class="attribute-badge">autocomplete="address-level2"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="en-country">Country</label>
+                        <input id="en-country" type="text" autocomplete="country-name">
+                        <div class="attribute-badge">autocomplete="country-name"</div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Formulario 3: Sin atributos estándar (Español) -->
+            <div class="form-card">
+                <h2>⚠️ Español (Sin Atributos)</h2>
+                <span class="badge-language">ES</span>
+                <form autocomplete="on">
+                    <div class="form-group">
+                        <label for="es-alt-email">Correo Electrónico</label>
+                        <input id="es-alt-email" type="email" name="correo_usuario" autocomplete="email" placeholder="ejemplo@mail.com">
+                        <div class="attribute-badge">name="correo_usuario"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="es-alt-phone">Teléfono</label>
+                        <input id="es-alt-phone" type="tel" name="numero_telefonico" autocomplete="tel">
+                        <div class="attribute-badge">name="numero_telefonico"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="es-full-name">Nombre Completo</label>
+                        <input id="es-full-name" type="text" name="nombre_completo" autocomplete="name">
+                        <div class="attribute-badge">name="nombre_completo"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="es-address-textarea">Dirección</label>
+                        <textarea id="es-address-textarea" name="domicilio" rows="3" autocomplete="street-address"></textarea>
+                        <div class="attribute-badge">name="domicilio"</div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Formulario 4: Mixto (inputmode fallback) -->
+            <div class="form-card">
+                <h2>🔄 Mixto (inputmode Fallback)</h2>
+                <span class="badge-language">MULTI</span>
+                <form autocomplete="on">
+                    <div class="form-group">
+                        <label for="multi-email">Correo / Email</label>
+                        <input id="multi-email" type="email" inputmode="email" autocomplete="email" placeholder="correo@dominio.com">
+                        <div class="attribute-badge">inputmode="email"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="multi-phone">Tel / Phone</label>
+                        <input id="multi-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="555-123-4567">
+                        <div class="attribute-badge">inputmode="tel"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="multi-first-name">Nombre / Name</label>
+                        <input id="multi-first-name" type="text" name="first_name" autocomplete="given-name" placeholder="John/Juan">
+                        <div class="attribute-badge">name="first_name"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="multi-last-name">Apellido / Last Name</label>
+                        <input id="multi-last-name" type="text" name="last_name" autocomplete="family-name" placeholder="Doe/García">
+                        <div class="attribute-badge">name="last_name"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="multi-salary">Salario / Salary</label>
+                        <input id="multi-salary" type="text" inputmode="numeric" autocomplete="off" placeholder="50000">
+                        <div class="attribute-badge">inputmode="numeric"</div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Formulario 5: Pattern (Validación) -->
+            <div class="form-card">
+                <h2>📋 Con Pattern (Validación)</h2>
+                <span class="badge-language">ES/EN</span>
+                <form autocomplete="on">
+                    <div class="form-group">
+                        <label for="pattern-email">Email (con validación)</label>
+                        <input id="pattern-email" type="email" pattern="[a-z0-9._+-]+@[a-z0-9.-]+" autocomplete="email" placeholder="user@example.com">
+                        <div class="attribute-badge">pattern="[a-z0-9._+-]+@..."</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pattern-phone">Teléfono (formato)</label>
+                        <input id="pattern-phone" type="tel" pattern="\d{10}" autocomplete="tel" placeholder="1234567890">
+                        <div class="attribute-badge">pattern="\d{10}"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pattern-linkedin">URL (LinkedIn)</label>
+                        <input id="pattern-linkedin" type="url" pattern="https?://(www\.)?linkedin\.com/.*" autocomplete="url">
+                        <div class="attribute-badge">pattern="linkedin.*"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pattern-github">GitHub</label>
+                        <input id="pattern-github" type="url" pattern="https?://(www\.)?github\.com/.*" autocomplete="url">
+                        <div class="attribute-badge">pattern="github.*"</div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Formulario 6: Portugués (Idioma nuevo) -->
+            <div class="form-card">
+                <h2>🌍 Português (Novo Idioma)</h2>
+                <span class="badge-language">PT</span>
+                <form autocomplete="on">
+                    <div class="form-group">
+                        <label for="pt-email">Correio Eletrônico</label>
+                        <input id="pt-email" type="email" autocomplete="email">
+                        <div class="attribute-badge">type="email"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pt-phone">Telefone</label>
+                        <input id="pt-phone" type="tel" autocomplete="tel">
+                        <div class="attribute-badge">type="tel"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pt-first-name">Primeiro Nome</label>
+                        <input id="pt-first-name" type="text" autocomplete="given-name">
+                        <div class="attribute-badge">autocomplete="given-name"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pt-last-name">Sobrenome</label>
+                        <input id="pt-last-name" type="text" autocomplete="family-name">
+                        <div class="attribute-badge">autocomplete="family-name"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pt-address">Endereço</label>
+                        <input id="pt-address" type="text" autocomplete="address-line1">
+                        <div class="attribute-badge">autocomplete="address-line1"</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pt-city">Cidade</label>
+                        <input id="pt-city" type="text" autocomplete="address-level2">
+                        <div class="attribute-badge">autocomplete="address-level2"</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <h3 style="color: #333; margin-bottom: 15px;">🎯 Resultados Esperados</h3>
+            <ul style="color: #666; line-height: 2; margin-left: 20px;">
+                <li><strong>Formulario 1 & 2 & 6:</strong> Todas las campos detectados ✅ (95%+ confianza)</li>
+                <li><strong>Formulario 3:</strong> La mayoría detectados ✅ (gracias a patrones semánticos)</li>
+                <li><strong>Formulario 4:</strong> Todos detectados ✅ (usando inputmode)</li>
+                <li><strong>Formulario 5:</strong> Todos detectados ✅ (pattern + semántica)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        console.log("📖 Para probar el sistema, abre la consola (F12) y ejecuta:");
+        console.log("   FFYDebug.printReport()");
+        console.log("   FFYDebug.analyzeField('nombre_del_campo')");
+        console.log("   FFYDebug.downloadReport('json')");
+    </script>
+</body>
+</html>

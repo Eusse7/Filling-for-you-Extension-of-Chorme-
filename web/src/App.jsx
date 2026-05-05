@@ -1,11 +1,13 @@
 import React from "react";
 import AdminPage from "./pages/AdminPage.jsx";
 import AuthPage from "./pages/AuthPage.jsx";
-import { authApi, getAccessToken, setAccessToken } from "./api/client.js";
+import { api, authApi, getAccessToken, setAccessToken } from "./api/client.js";
 
 export default function App() {
   const [authChecked, setAuthChecked] = React.useState(false);
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
+  const [isDeleting, setIsDeleting] = React.useState(false);
 
   React.useEffect(() => {
     (async () => {
@@ -34,6 +36,19 @@ export default function App() {
   function handleLogout() {
     setAccessToken("");
     setIsAuthenticated(false);
+    window.postMessage({ type: "FFY_LOGOUT" }, globalThis.location.origin);
+  }
+
+  async function handleDeleteAccount() {
+    try {
+      setIsDeleting(true);
+      await api.delete("/auth/me");
+      setAccessToken("");
+      window.postMessage({ type: "FFY_LOGOUT" }, globalThis.location.origin);
+      globalThis.location.reload();
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   if (!authChecked) {
@@ -53,7 +68,14 @@ export default function App() {
             </a>
           </p>
         </div>
-        {isAuthenticated && <button onClick={handleLogout}>Cerrar sesión</button>}
+        {isAuthenticated && (
+          <div className="rowRight">
+            <button onClick={handleLogout}>Cerrar sesión</button>
+            <button className="dangerButton" onClick={() => setShowDeleteConfirm(true)}>
+              Borrar cuenta
+            </button>
+          </div>
+        )}
       </header>
 
       <main className="main">
@@ -64,6 +86,27 @@ export default function App() {
         <span>API: http://localhost:3000</span>
         <span>Web: http://localhost:5173</span>
       </footer>
+
+      {showDeleteConfirm && (
+        <div className="modalOverlay" role="dialog" aria-modal="true">
+          <div className="modal">
+            <h3>¿Eliminar cuenta?</h3>
+            <p>Esta accion es permanente y borrara tus datos en la base de datos.</p>
+            <div className="modalActions">
+              <button className="secondary" onClick={() => setShowDeleteConfirm(false)}>
+                Volver
+              </button>
+              <button
+                className="dangerButton"
+                disabled={isDeleting}
+                onClick={handleDeleteAccount}
+              >
+                {isDeleting ? "Eliminando..." : "Confirmar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

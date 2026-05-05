@@ -5,9 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Autofill Demo</title>
     <link rel="stylesheet" href="popup.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
   </head>
   <body>
-    <h3>Filling for you</h3>
+    <div class="header">
+      <h3>Filling for you</h3>
+      <div class="themeToggle">
+        <i class="fa fa-moon-o" aria-hidden="true"></i>
+        <label class="switch" for="toggleTheme">
+          <input id="toggleTheme" type="checkbox" aria-label="Modo oscuro" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
 
     <div class="muted">
       Para actualizar tus datos, ve a tu perfil en la web. Si no has iniciado sesión, te llevará a login.
@@ -17,8 +27,6 @@
       <button id="openProfile">Ir a mi perfil</button>
       <button id="fill">Previsualizar y llenar</button>
     </div>
-
-    <pre id="out" class="muted"></pre>
 
     <script src="popup.js"></script>
   </body>

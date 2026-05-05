@@ -16,6 +16,7 @@ const EMPTY_PROFILE = {
 export function useProfile() {
   const [profile, setProfile] = useState(null);
   const [status, setStatus] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -44,5 +45,19 @@ export function useProfile() {
     }
   }
 
-  return { profile, setProfile, status, save };
+  async function deleteAccount() {
+    try {
+      setIsDeleting(true);
+      setStatus("Eliminando cuenta...");
+      await api.delete("/auth/me");
+      setStatus("Cuenta eliminada.");
+    } catch (e) {
+      setStatus(String(e));
+      throw e;
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
+  return { profile, setProfile, status, save, deleteAccount, isDeleting };
 }

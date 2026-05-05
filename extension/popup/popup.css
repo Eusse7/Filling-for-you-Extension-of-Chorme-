@@ -1,13 +1,44 @@
-body { font-family: system-ui, Arial, sans-serif; width: 340px; margin: 0; padding: 12px; color: #111827; }
-h3 { margin: 0 0 8px; }
+body {
+	font-family: system-ui, Arial, sans-serif;
+	width: 340px;
+	margin: 0;
+	padding: 12px;
+	color: var(--text);
+	background: var(--bg);
+	color-scheme: light;
+}
+:root {
+	--bg: #ffffff;
+	--text: #111827;
+	--muted: #6b7280;
+	--border: #d1d5db;
+	--button-bg: #f3f4f6;
+	--input-bg: #ffffff;
+}
+body.dark {
+	color-scheme: dark;
+	--bg: #0b1220;
+	--text: #e5e7eb;
+	--muted: #9ca3af;
+	--border: #2b3648;
+	--button-bg: #1f2937;
+	--input-bg: #0f172a;
+}
+h3 { margin: 0; }
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
 .row { display:flex; gap: 8px; align-items: center; margin: 10px 0; }
 input[type="text"] { flex: 1; padding: 8px 10px; border-radius: 10px; border: 1px solid #ddd; }
 button {
 	padding: 9px 10px;
 	border-radius: 10px;
-	border: 1px solid #d1d5db;
-	background: #f3f4f6;
-	color: #111827;
+	border: 1px solid var(--border);
+	background: var(--button-bg);
+	color: var(--text);
 	font-size: 13px;
 	font-weight: 600;
 	line-height: 1.2;
@@ -16,5 +47,64 @@ button {
 .row button { flex: 1; }
 button:hover { filter: brightness(0.98); }
 label { display:flex; gap: 8px; align-items: center; }
-.muted { opacity: .7; font-size: 12px; }
+.muted { color: var(--muted); font-size: 12px; }
+
+.themeToggle {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 0;
+}
+
+.themeToggle .fa {
+	font-size: 16px;
+	color: var(--muted);
+}
+
+.themeToggle .switch {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.themeToggle .switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.themeToggle .slider {
+	width: 42px;
+	height: 24px;
+	border-radius: 999px;
+	background: var(--border);
+	border: 1px solid var(--border);
+	position: relative;
+	transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.themeToggle .slider::before {
+	content: "";
+	position: absolute;
+	width: 18px;
+	height: 18px;
+	left: 2px;
+	top: 2px;
+	border-radius: 50%;
+	background: var(--button-bg);
+	border: 1px solid var(--button-border);
+	transition: transform 0.2s ease;
+}
+
+.themeToggle .switch input:checked + .slider {
+	background: #0ea5e9;
+	border-color: #0ea5e9;
+}
+
+.themeToggle .switch input:checked + .slider::before {
+	transform: translateX(18px);
+	background: #e5e7eb;
+	border-color: #e5e7eb;
+}
 pre { white-space: pre-wrap; background: #0b1020; color: #e9f0ff; padding: 10px; border-radius: 12px; max-height: 220px; overflow:auto; }
